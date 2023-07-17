@@ -21,3 +21,4 @@ npm run test
 ```sh
 npm run testnet
 ```
+# ordinal
