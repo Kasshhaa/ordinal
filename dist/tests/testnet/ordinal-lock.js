@@ -51,26 +51,4 @@ async function main() {
     console.log('OrdinalLock contract `purchase` called: ', result);
     const needSatoshiAsFee = callTx.outputAmount + callTx.getEstimateFee() + callTx.inputAmount;
     console.log('needSatoshiAsFee', needSatoshiAsFee);
-    // now you have a partially Signed tx, send this tx to user , then user add a input, and sign it
-    const userPrivateKey = scrypt_ts_1.bsv.PrivateKey.fromWIF('cS98v9dfvPsLUcpriCpiRw3tZ65sp77XjDr5ZJtnXUvQKHQiqtQL');
-    const userSigner = new scrypt_ts_1.TestWallet(userPrivateKey, new scrypt_ts_1.DefaultProvider({
-        network: scrypt_ts_1.bsv.Networks.testnet,
-    }));
-    const utxos = await userSigner.listUnspent(userPrivateKey.toAddress(), {
-        minSatoshis: needSatoshiAsFee,
-    });
-    // add p2pkh input to pay fee
-    callTx.from(utxos);
-    console.log('utxos', utxos);
-    // only sign p2pkh input
-    await userSigner.signTransaction(callTx);
-    console.log('check fee', callTx.getFee(), callTx.getEstimateFee());
-    await userSigner.provider.sendTransaction(callTx);
-    console.log('OrdinalLock contract `purchase` called: ', callTx.id);
 }
-describe('Test SmartContract `OrdinalLock` on testnet', () => {
-    it('should succeed', async () => {
-        await main();
-    });
-});
-//# sourceMappingURL=ordinal-lock.js.map
